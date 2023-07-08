@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { ContactForm } from './phonebook/ContactForm';
-import { ContactList } from './phonebook/ContactList';
-import { Filter } from './phonebook/Filter';
+import { ContactForm } from './ContactForm';
+import { ContactList } from './ContactList';
+import { Filter } from './Filter';
 import { nanoid } from 'nanoid';
 
 export class App extends Component {
@@ -12,17 +12,18 @@ export class App extends Component {
 
   addContact = (name, number) => {
     const { contacts } = this.state;
-    if (
-      !contacts.some(
-        contact => contact.name === name && contact.number === number
-      )
-    ) {
-      this.setState(prevState => ({
-        contacts: [...prevState.contacts, { id: nanoid(), name, number }],
-      }));
-    } else {
-      alert('Rosie Simpson is already in contacts');
+    const existingContacts = contacts.some(
+      contact =>
+        contact.name.toLowerCase() === name.toLowerCase() ||
+        contact.number === number
+    );
+
+    if (existingContacts) {
+      return alert('Rosie Simpson is already in contacts');
     }
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, { id: nanoid(), name, number }],
+    }));
   };
 
   handleFilterChange = filter => {
